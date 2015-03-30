@@ -451,6 +451,10 @@
                 result;
 
             if (node === null) return;
+            if (node.type === tokenType.id) {
+                throw 'variables are not supported at this point';
+            }
+            
             if (node.type === tokenType.num) {
                 return parseFloat(node.value);
             }
@@ -460,8 +464,8 @@
                 : calculate(node.left);
 
             right = node.right.type === tokenType.num
-            ? parseFloat(node.right.value)
-            : calculate(node.right);
+                ? parseFloat(node.right.value)
+                : calculate(node.right);
 
             if (node.type !== tokenType.op) {
                 throw 'an operator was expected';
