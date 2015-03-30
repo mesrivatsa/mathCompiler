@@ -131,7 +131,7 @@
         };
 
         /**
-         * creates an operaotor token object
+         * creates an operator token object
          *     the function assumes that an operator length is 1 character
          * @return {object} the new operator token
          */
@@ -318,7 +318,7 @@
             },
 
             '^' : function(x, y) {
-                return x ^ y;
+                return Math.pow(x, y);
             }            
         }
 
@@ -447,7 +447,8 @@
         calculate = function (node) {
             var left,
                 right,
-                operaotor;
+                operator,
+                result;
 
             if (node === null) return;
             if (node.type === tokenType.num) {
@@ -466,7 +467,8 @@
                 throw 'an operator was expected';
             }
 
-            return mathOperations[node.value](left, right);
+            result = mathOperations[node.value](left, right);
+            return result; 
         }
 
         return {

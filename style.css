@@ -164,11 +164,11 @@ elements
 }
 
 #controls .key span:hover {
-	color:#369975;
+	background: #6B6B6B;
 }
 
 #controls .key-distinct span:hover {
-	color:#000;
+	background:#4C96FC;
 }
 
 #controls .key-distinct span {

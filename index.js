@@ -4,7 +4,6 @@ $(document).ready(function () {
     var MAX_EXP_LENGTH,
         OPERATORS,
         shouldAutoClear,
-        expression,
         expressionElm,
         tokensElm,
         treeElm,
@@ -18,7 +17,6 @@ $(document).ready(function () {
     tokensElm = $('#tokens');
     treeElm = $('#tree');
     resultElm = $('#result');
-    expression = '';
 
     expressionElm.focus();
 
@@ -30,35 +28,11 @@ $(document).ready(function () {
     //$('#expression').html('2*8^4');
 
     function clearAll() {
-        expression = '';
         shouldAutoClear = false;
         expressionElm.empty();
         tokensElm.empty();
         treeElm.empty();
         resultElm.empty();
-    }
-
-    function updateExpression(value) {
-        if (shouldAutoClear) {
-            clearAll();
-        }
-
-        if (expression.length >= MAX_EXP_LENGTH) {
-            alert('The expression maximum length is ' + MAX_EXP_LENGTH + ' characters'); //TODO: show toast message instead
-            return;
-        }
-
-        expression += value;
-        expressionElm.html(expression);
-    }
-
-    function deleteLastChar() {
-        if (expression === undefined || expression.length === 0) {
-            return;
-        }
-
-        expression = expression.slice(0, -1);
-        expressionElm.html(expression);
     }
 
     function parse(tokens) {
@@ -111,16 +85,29 @@ $(document).ready(function () {
         htmlElm.append(treeHtml);
     }
 
+    function updateExpression(value) {
+    	if (shouldAutoClear) {
+    		clearAll();
+    	}
+
+    	value = expressionElm.text() + value;
+    	expressionElm.html(value);
+    }
+
     function updateResult(exp) {
         var tokens,
             root,
             result;
 
+        clearAll();
+
         if (exp === undefined || exp.length === 0) {
             return;
         }
 
-        updateExpression('=');
+        while (exp[exp.length -1] === '=') {
+        	exp = exp.substring(0, exp.length - 1);
+        }
 
         try {
             try {
@@ -167,6 +154,9 @@ $(document).ready(function () {
             resultElm.html('<span style="color:#FF2655;font-size:2vh;margin-right:10px;">Could not calculate an expression from the tree: ' + ex + '</span>');
         }
 
+        exp += '=';
+        expressionElm.html(exp);
+
         shouldAutoClear = true;
     }
 
@@ -184,12 +174,11 @@ $(document).ready(function () {
     $('#controls').on('click', 'span', function () {
         var spanElm,
             type,
-            value;
+            value,
+            exp;
 
         spanElm = $(this);
         type = spanElm.attr('data-type');
-
-        expression = expressionElm.html();
 
         switch (type) {
         case 'key':
@@ -209,8 +198,9 @@ $(document).ready(function () {
         case 'clear':
             clearAll();
             break;
-        case 'parse':
-            updateResult(expression);
+        case 'calculate':
+        	exp = expressionElm.html();
+            updateResult(exp);
             break;
         }
 
@@ -236,14 +226,15 @@ $(document).ready(function () {
             clearAll();
         }
 
-        
+       expressionElm.focus(); 
     });
 
     /**
      * handles special keys
      */
     $('body').on('keydown', function (e) {
-        var code;
+        var code,
+        	exp;
         
         code = e.keyCode || e.which;
 
@@ -263,10 +254,12 @@ $(document).ready(function () {
         //13: Enter
         if (code === 13)
         {
-            expression = expressionElm.html();
-            updateResult(expression);
+            exp = expressionElm.html();
+            updateResult(exp);
             e.preventDefault();
             return;
         }
+
+        expressionElm.focus();
     });
 });
