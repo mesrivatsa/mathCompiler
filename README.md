@@ -7,4 +7,4 @@ It displays a UI for composing a mathamatical expression and calculates the resu
 2. builds the abstract syntax tree out of those tokens
 3. traverses the tree and calculates the result.
 
-The insparation for this project came from codewars.com 'Three Pass Compiler" code kata.
+The insparation for this project came from codewars.com 'Three Pass Compiler' code kata.
