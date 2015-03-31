@@ -347,6 +347,8 @@
             }
             index = 0;
 
+            //we want to parse the expression from left to right to avoid problems like 1-1-1=1
+            tokens = tokens.reverse();
             return parseExpression();
         };
 
@@ -373,34 +375,34 @@
          * @return {object} the abstract expression tree node
          */
         parseBinary = function (order) {
-            var left,
+            var right,
                 token,
                 node;
 
-            left = order == orderOfOperations.length - 1
+            right = order == orderOfOperations.length - 1
                 ? parsePrimary()
                 : parseBinary(order + 1);
             
             token = peekAtNextToken();
             if (token === null) {
-                return left;
+                return right;
             }
 
             while (isInLevel(token.value, order)) {
                 index += 1;
                 node = {};
                 node = token;
-                node.left = left;
-                node.right = parseBinary(order);
-                left = node;
+                node.right = right;
+                node.left = parseBinary(order);
+                right = node;
                 
                 token = peekAtNextToken();
                 if (token === null) {
-                    return left;
+                    return right;
                 }
             }
 
-            return left;
+            return right;
         };
 
         /**
@@ -423,13 +425,13 @@
                 return node;
             }
 
-            if (token.value === '(') {
+            if (token.value === ')') {
                 index += 1;
                 node = parseExpression();
 
                 token = peekAtNextToken();
-                if (token.value !== ')') {
-                    throw "error: ')' was expected";
+                if (token.value !== '(') {
+                    throw "error: '(' was expected";
                 }
 
                 index += 1;

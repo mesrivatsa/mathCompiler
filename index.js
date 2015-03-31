@@ -278,7 +278,5 @@ $(document).ready(function () {
             e.preventDefault();
             return;
         }
-
-        placeCaretAtEnd(expressionElm.get(0));
     });
 });
