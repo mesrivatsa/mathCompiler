@@ -1,16 +1,9 @@
 * do all calculations on each key press
 * hover on tree node/table row -> higlight number/operator/id in expression
-* bug: clears expression on key combinations like alt+tab
 * add support for unary operations like 4! -1 sqrt log ln
 * add support for functions
 * valid operators are defined in multiple places. delete what's unnecessary
-* catch errors
-* calculate expression
-* redesign ui
-* the ui is not responsive
 * add giant tooltip at the center of the screen of the last key pressed (like in phones)
 * / and * operator is different in calculator and in expression
-* del and clear buttons are too large
 * add affects on clear/enter
-* get rid of bootstrap
 * tooltip for keyboard shortcuts, or ta toggle button that toggles those hints
